@@ -25,7 +25,7 @@ public class UserController {
 
     @Operation(summary = "Register User")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "User Registered successfully"),
+            @ApiResponse(responseCode = "200", description = "User Registered successfully"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error"),
             @ApiResponse(responseCode = "400", description = "Bad request")
     })

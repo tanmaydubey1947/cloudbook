@@ -33,7 +33,7 @@ public class AuthController {
     public ResponseEntity<BaseResponse> login(@RequestBody final AuthRequest request) {
         log.info("Initiating token generation...");
         final BaseResponse response = authService.authenticate(request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
 }
