@@ -96,11 +96,11 @@ public class OrderService {
         return orderMapper.toResponse(savedOrder);
     }
 
-    public OrderResponse getUserOrders() { //TODO: Might need to change logic
+    public OrderResponse getUserOrders() {
         String username = getCurrentUsername();
         List<Order> ordersByUser = orderRepository.findByUsername(username);
         return OrderResponse.builder()
-                .items(orderMapper.toItemResponseList(ordersByUser))
+                .items(orderMapper.toItemResponseList(ordersByUser)) //TODO: Might need to change logic
                 .build();
     }
 
