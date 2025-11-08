@@ -38,7 +38,7 @@ public class Book {
     private int stock;
 
     @Column(nullable = false)
-    private double rating;
+    private BigDecimal rating;
 
     @Column(nullable = false)
     private long version;

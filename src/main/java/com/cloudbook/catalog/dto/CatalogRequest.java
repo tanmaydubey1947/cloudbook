@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,8 +14,8 @@ public class CatalogRequest {
     private String title;
     private String author;
     private String genre;
-    private double price;
+    private BigDecimal price;
     private int stock;
-    private double rating;
+    private BigDecimal rating;
 
 }

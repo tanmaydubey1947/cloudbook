@@ -61,7 +61,7 @@ public class CatalogService {
                         book.getId().toString(),
                         book.getTitle(),
                         book.getAuthor(),
-                        book.getPrice().doubleValue()
+                        book.getPrice()
                 ))
                 .toList();
 
@@ -76,7 +76,7 @@ public class CatalogService {
                 book.getId().toString(),
                 book.getTitle(),
                 book.getAuthor(),
-                book.getPrice().doubleValue()
+                book.getPrice()
         );
     }
 
@@ -85,7 +85,7 @@ public class CatalogService {
                 .title(request.getTitle())
                 .author(request.getAuthor())
                 .genre(request.getGenre())
-                .price(BigDecimal.valueOf(request.getPrice()))
+                .price(request.getPrice())
                 .stock(request.getStock())
                 .rating(request.getRating())
                 .version(1L)
@@ -96,7 +96,7 @@ public class CatalogService {
                 savedBook.getId().toString(),
                 savedBook.getTitle(),
                 savedBook.getAuthor(),
-                savedBook.getPrice().doubleValue()
+                savedBook.getPrice()
         );
     }
 
@@ -107,7 +107,7 @@ public class CatalogService {
         existingBook.setTitle(request.getTitle());
         existingBook.setAuthor(request.getAuthor());
         existingBook.setGenre(request.getGenre());
-        existingBook.setPrice(BigDecimal.valueOf(request.getPrice()));
+        existingBook.setPrice(request.getPrice());
         existingBook.setStock(request.getStock());
         existingBook.setRating(request.getRating());
         existingBook.setVersion(existingBook.getVersion() + 1);
@@ -117,7 +117,7 @@ public class CatalogService {
                 updatedBook.getId().toString(),
                 updatedBook.getTitle(),
                 updatedBook.getAuthor(),
-                updatedBook.getPrice().doubleValue()
+                updatedBook.getPrice()
         );
     }
 
@@ -143,7 +143,7 @@ public class CatalogService {
                 updatedBook.getId().toString(),
                 updatedBook.getTitle(),
                 updatedBook.getAuthor(),
-                updatedBook.getPrice().doubleValue()
+                updatedBook.getPrice()
         );
     }
 }
