@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudbook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudbook
+  template:
+    metadata:
+      labels:
+        app: cloudbook
+    spec:
+      containers:
+        - name: cloudbook
+          image: tanmaydubey552001/cloudbook:latest
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: h2-data
+              mountPath: /data/h2db
+      volumes:
+        - name: h2-data
+          persistentVolumeClaim:
+            claimName: h2-pvc
