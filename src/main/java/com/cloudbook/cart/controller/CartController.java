@@ -12,8 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping
-@RestController("/api/cart")
+@RestController
+@RequestMapping("/api/cart")
 public class CartController {
 
     @Autowired
