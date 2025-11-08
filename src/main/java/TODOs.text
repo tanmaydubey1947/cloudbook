@@ -1,2 +1,4 @@
 replace all double with BigDecimal
 error handling
+remove bad request of swagger implementation from Get APIs
+need to implement optimistic locking
