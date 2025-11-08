@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping
@@ -25,6 +26,7 @@ public class CartController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @GetMapping
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<BaseResponse> viewCart() {
         final BaseResponse response = cartService.getCurrentUserCart();
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -37,6 +39,7 @@ public class CartController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PostMapping("/add")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<BaseResponse> addToCart(@RequestBody CartRequest request) {
         final BaseResponse response = cartService.addToCart(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -48,6 +51,7 @@ public class CartController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error"),
     })
     @DeleteMapping("/remove/{bookId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<BaseResponse> removeFromCart(@PathVariable("bookId") String bookId) { //TODO: Check if we can get UUID
         final BaseResponse response = cartService.removeItem(bookId);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -60,6 +64,7 @@ public class CartController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @DeleteMapping("/clear")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<BaseResponse> clearCart() {
         final BaseResponse response = cartService.clearCart();
         return new ResponseEntity<>(response, HttpStatus.OK);

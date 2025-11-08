@@ -43,6 +43,8 @@ public class UserSecurityConfig {
                                 .requestMatchers("/error").permitAll()
                                 .requestMatchers("/api/auth/**").authenticated()
                                 .requestMatchers("/api/books/**").authenticated()
+                                .requestMatchers("/api/cart/**").authenticated()
+                                .requestMatchers("/api/order/**").authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
