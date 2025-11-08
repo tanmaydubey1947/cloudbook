@@ -4,6 +4,7 @@ import com.cloudbook.catalog.dto.CatalogRequest;
 import com.cloudbook.catalog.dto.CatalogResponse;
 import com.cloudbook.catalog.model.Book;
 import com.cloudbook.catalog.repository.CatalogRepository;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,6 +137,7 @@ public class CatalogService {
 
     @Transactional
     @Retry(name = "stockUpdateRetry", fallbackMethod = "handleStockUpdateFailure")
+    @RateLimiter(name = "stockUpdateRate")
     public CatalogResponse updateStock(String bookId, int delta) {
         Book existingBook = catalogRepository.findById(UUID.fromString(bookId))
                 .orElseThrow(() -> new RuntimeException("Book not found with id: " + bookId));
@@ -159,7 +161,7 @@ public class CatalogService {
         );
     }
 
-    public CatalogResponse handleStockUpdateFailure(String bookId, Throwable ex) {
+    public CatalogResponse handleStockUpdateFailure(String bookId, int delta, Throwable ex) {
         log.error("Stock update failed for book " + bookId + ": " + ex.getMessage());
         throw new RuntimeException("Could not update stock after retries. Please try again later.");
     }
