@@ -1,7 +1,9 @@
 package com.cloudbook.auth.controller;
 
 import com.cloudbook.auth.dto.AuthRequest;
+import com.cloudbook.auth.dto.UserRequest;
 import com.cloudbook.auth.service.auth.AuthService;
+import com.cloudbook.auth.service.user.UserService;
 import com.cloudbook.common.dto.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,6 +25,9 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private UserService userService;
+
     @Operation(summary = "Generate Token")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Token generated successfully"),
@@ -34,6 +39,19 @@ public class AuthController {
         log.info("Initiating token generation...");
         final BaseResponse response = authService.authenticate(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Register User")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "User Registered successfully"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
+    @PostMapping("/register")
+    public ResponseEntity<BaseResponse> register(@RequestBody final UserRequest request) {
+        log.info("Initiating user registration...");
+        final BaseResponse response = userService.registerUser(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }
