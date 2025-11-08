@@ -1,5 +1,6 @@
 package com.cloudbook.catalog.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CatalogRequest {
 
     private String title;
@@ -17,5 +19,6 @@ public class CatalogRequest {
     private BigDecimal price;
     private int stock;
     private BigDecimal rating;
+    private int delta; // Change in stock
 
 }

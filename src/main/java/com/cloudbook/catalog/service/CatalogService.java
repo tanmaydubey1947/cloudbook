@@ -4,10 +4,13 @@ import com.cloudbook.catalog.dto.CatalogRequest;
 import com.cloudbook.catalog.dto.CatalogResponse;
 import com.cloudbook.catalog.model.Book;
 import com.cloudbook.catalog.repository.CatalogRepository;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -131,19 +134,33 @@ public class CatalogService {
         return response;
     }
 
-    public CatalogResponse updateStock(String bookId, int newStock) { //TODO: Implement optimistic locking and increment / decrement stock logic
+    @Transactional
+    @Retry(name = "stockUpdateRetry", fallbackMethod = "handleStockUpdateFailure")
+    public CatalogResponse updateStock(String bookId, int delta) {
         Book existingBook = catalogRepository.findById(UUID.fromString(bookId))
                 .orElseThrow(() -> new RuntimeException("Book not found with id: " + bookId));
 
+        int newStock = existingBook.getStock() + delta;
+        if (newStock < 0) {
+            throw new RuntimeException("Insufficient stock for book id: " + bookId);
+        }
         existingBook.setStock(newStock);
-        existingBook.setVersion(existingBook.getVersion() + 1);
-
-        Book updatedBook = catalogRepository.save(existingBook);
+        Book updatedBook;
+        try {
+            updatedBook = catalogRepository.save(existingBook);
+        } catch (ObjectOptimisticLockingFailureException ex) {
+            throw new RuntimeException("Concurrent stock update detected for book: " + bookId);
+        }
         return new CatalogResponse(
                 updatedBook.getId().toString(),
                 updatedBook.getTitle(),
                 updatedBook.getAuthor(),
                 updatedBook.getPrice()
         );
+    }
+
+    public CatalogResponse handleStockUpdateFailure(String bookId, Throwable ex) {
+        log.error("Stock update failed for book " + bookId + ": " + ex.getMessage());
+        throw new RuntimeException("Could not update stock after retries. Please try again later.");
     }
 }

@@ -40,6 +40,7 @@ public class Book {
     @Column(nullable = false)
     private BigDecimal rating;
 
+    @Version
     @Column(nullable = false)
     private long version;
 }

@@ -102,9 +102,9 @@ public class CatalogController {
     })
     @PatchMapping("/{bookId}/stock")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<CatalogResponse> updateStock(@PathVariable String bookId, @RequestParam int newStock) {
+    public ResponseEntity<CatalogResponse> updateStock(@PathVariable String bookId, @RequestBody CatalogRequest request) {
         log.info("Updating stock for book ID: {}", bookId);
-        CatalogResponse response = catalogService.updateStock(bookId, newStock);
+        CatalogResponse response = catalogService.updateStock(bookId, request.getDelta());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

@@ -12,6 +12,8 @@ import com.cloudbook.order.model.OrderItem;
 import com.cloudbook.order.model.OrderStatus;
 import com.cloudbook.order.repository.OrderRepository;
 import com.cloudbook.order.util.OrderMapper;
+import io.github.resilience4j.retry.annotation.Retry;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class OrderService {
 
     @Autowired
@@ -108,6 +111,7 @@ public class OrderService {
         return orderMapper.toResponse(order);
     }
 
+    @Retry(name = "stockUpdateRetry", fallbackMethod = "handleCancelOrderFailure")
     @Transactional
     public void cancelOrder(String orderId) {
         String username = getCurrentUsername();
@@ -125,15 +129,22 @@ public class OrderService {
 
         order.setStatus(OrderStatus.CANCELLED);
 
-        // Restock books
+        // Restock books with optimistic locking
         for (OrderItem item : order.getItems()) {
-            Book book = item.getBook();
+            Book book = catalogRepository.findById(item.getBook().getId())
+                    .orElseThrow(() -> new RuntimeException("Book not found"));
             book.setStock(book.getStock() + item.getQuantity());
             catalogRepository.save(book);
         }
 
         orderRepository.save(order);
     }
+
+    public void handleCancelOrderFailure(String orderId, Throwable ex) {
+        log.error("Failed to cancel order " + orderId + ": " + ex.getMessage());
+        throw new RuntimeException("Could not cancel order due to concurrent stock updates. Please try again.");
+    }
+
 
     private String getCurrentUsername() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
