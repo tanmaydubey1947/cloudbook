@@ -7,6 +7,7 @@ import com.cloudbook.cart.repository.CartRepository;
 import com.cloudbook.catalog.model.Book;
 import com.cloudbook.catalog.repository.CatalogRepository;
 import com.cloudbook.order.dto.OrderResponse;
+import com.cloudbook.order.event.OrderPlacedEvent;
 import com.cloudbook.order.model.Order;
 import com.cloudbook.order.model.OrderItem;
 import com.cloudbook.order.model.OrderStatus;
@@ -15,6 +16,7 @@ import com.cloudbook.order.util.OrderMapper;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +44,9 @@ public class OrderService {
 
     @Autowired
     private OrderMapper orderMapper;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public OrderResponse placeOrder() {
@@ -86,6 +91,7 @@ public class OrderService {
 
         cart.getItems().clear();
         cartRepository.save(cart);
+        eventPublisher.publishEvent(new OrderPlacedEvent(this, savedOrder));
 
         return orderMapper.toResponse(savedOrder);
     }
