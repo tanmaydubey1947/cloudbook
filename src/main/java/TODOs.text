@@ -1,6 +1,6 @@
 replace all double with BigDecimal: done
+remove bad request of swagger implementation from Get APIs: done
 error handling
-remove bad request of swagger implementation from Get APIs
 need to implement optimistic locking
 Publish a domain event (OrderPlacedEvent) to an in-memory broker (e.g., Spring ApplicationEventPublisher).
 protect swagger endpoints: http://localhost:8080/swagger-ui/index.html#

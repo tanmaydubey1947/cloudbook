@@ -23,7 +23,6 @@ public class CartController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Cart retrieved successfully"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error"),
-            @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @GetMapping
     @PreAuthorize("hasRole('CUSTOMER')")

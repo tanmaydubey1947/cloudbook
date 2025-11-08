@@ -28,7 +28,6 @@ public class CatalogController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Book details fetched successfully"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error"),
-            @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('CUSTOMER')")
