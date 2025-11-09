@@ -39,7 +39,7 @@ public class OrderController {
     @GetMapping("{orderId}")
     @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<BaseResponse> viewOrder(@PathVariable("orderId") String orderId) {
-        final BaseResponse response = orderService.getOrderById(orderId); //TODO: Check if we can get UUID
+        final BaseResponse response = orderService.getOrderById(orderId);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -63,7 +63,7 @@ public class OrderController {
     @PatchMapping("{orderId}/cancel")
     @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<?> cancelOrder(@PathVariable("orderId") String orderId) {
-        orderService.cancelOrder(orderId); //TODO: Check if we can get UUID
+        orderService.cancelOrder(orderId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

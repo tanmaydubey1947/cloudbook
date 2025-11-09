@@ -100,7 +100,7 @@ public class OrderService {
         String username = getCurrentUsername();
         List<Order> ordersByUser = orderRepository.findByUsername(username);
         return OrderResponse.builder()
-                .items(orderMapper.toItemResponseList(ordersByUser)) //TODO: Might need to change logic
+                .items(orderMapper.toItemResponseList(ordersByUser))
                 .build();
     }
 

@@ -34,8 +34,5 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status = OrderStatus.PLACED;
 
-//    public Order(UUID userId) { //TODO
-//        this.userId = userId;
-//    }
 }
 

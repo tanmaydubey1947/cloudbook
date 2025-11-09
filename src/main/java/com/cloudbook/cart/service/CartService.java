@@ -39,7 +39,7 @@ public class CartService {
         return cartMapper.toResponse(cart);
     }
 
-    public CartResponse addToCart(CartRequest request) {//TODO: Validate Logic
+    public CartResponse addToCart(CartRequest request) {
         String username = getCurrentUsername();
         Cart cart = cartRepository.findByUsername(username)
                 .orElseGet(() -> new Cart(username));

@@ -51,7 +51,7 @@ public class CartController {
     })
     @DeleteMapping("/remove/{bookId}")
     @PreAuthorize("hasAuthority('CUSTOMER')")
-    public ResponseEntity<BaseResponse> removeFromCart(@PathVariable("bookId") String bookId) { //TODO: Check if we can get UUID
+    public ResponseEntity<BaseResponse> removeFromCart(@PathVariable("bookId") String bookId) {
         final BaseResponse response = cartService.removeItem(bookId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
