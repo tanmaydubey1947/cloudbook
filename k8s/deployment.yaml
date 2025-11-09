@@ -17,10 +17,15 @@ spec:
           image: tanmaydubey552001/cloudbook:latest
           ports:
             - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:h2:file:/data/h2db/cloudbook;DB_CLOSE_ON_EXIT=FALSE
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: update
           volumeMounts:
-            - name: h2-data
+            - name: h2-storage
               mountPath: /data/h2db
       volumes:
-        - name: h2-data
+        - name: h2-storage
           persistentVolumeClaim:
             claimName: h2-pvc

@@ -23,13 +23,29 @@ spec:
             - name: SPRING_JPA_HIBERNATE_DDL_AUTO
               value: update
           volumeMounts:
-            - name: h2-data
+            - name: h2-storage
               mountPath: /data/h2db
       volumes:
-        - name: h2-data
+        - name: h2-storage
           persistentVolumeClaim:
             claimName: h2-pvc
 ---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: h2-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  hostPath:
+    path: /mnt/data/h2db
+
+---
+
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -41,7 +57,9 @@ spec:
     requests:
       storage: 1Gi
   storageClassName: local-path
+
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
