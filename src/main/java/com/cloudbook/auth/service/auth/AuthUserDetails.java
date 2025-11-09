@@ -19,7 +19,7 @@ public class AuthUserDetails implements UserDetails {
     private final String password;
     private final List<GrantedAuthority> authorities;
 
-    AuthUserDetails(User user) {
+    public AuthUserDetails(User user) {
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()));
