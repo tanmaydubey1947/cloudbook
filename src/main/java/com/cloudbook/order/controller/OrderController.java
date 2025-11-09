@@ -37,7 +37,7 @@ public class OrderController {
     @GetMapping("{orderId}")
     public ResponseEntity<BaseResponse> viewOrder(@PathVariable("orderId") String orderId) {
         final BaseResponse response = orderService.getOrderById(orderId);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Operation(summary = "View User Order")
@@ -48,7 +48,7 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<BaseResponse> viewUserOrder() {
         final BaseResponse response = orderService.getUserOrders();
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Operation(summary = "Cancel Order")

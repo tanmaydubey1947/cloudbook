@@ -3,6 +3,7 @@ package com.cloudbook.order.service;
 import com.cloudbook.auth.model.User;
 import com.cloudbook.auth.repository.UserRepository;
 import com.cloudbook.cart.model.Cart;
+import com.cloudbook.cart.model.CartItem;
 import com.cloudbook.cart.repository.CartRepository;
 import com.cloudbook.catalog.model.Book;
 import com.cloudbook.catalog.repository.CatalogRepository;
@@ -51,6 +52,7 @@ public class OrderService {
     @Transactional
     public OrderResponse placeOrder() {
         String username = getCurrentUsername();
+
         Cart cart = cartRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
 
@@ -65,25 +67,30 @@ public class OrderService {
 
         BigDecimal total = BigDecimal.ZERO;
 
-        for (var item : cart.getItems()) {
-            Book book = catalogRepository.findById(item.getBook().getId())
-                    .orElseThrow(() -> new RuntimeException("Book not found"));
+        for (CartItem cartItem : cart.getItems()) {
+            UUID bookId = cartItem.getBook().getId();
+            Book book = catalogRepository.findById(bookId)
+                    .orElseThrow(() -> new RuntimeException("Book not found: " + bookId));
 
-            if (book.getStock() < item.getQuantity()) {
+            int quantity = cartItem.getQuantity();
+            if (book.getStock() < quantity) {
                 throw new RuntimeException("Insufficient stock for book: " + book.getTitle());
             }
 
-            book.setStock(book.getStock() - item.getQuantity());
+            // Update stock in memory
+            book.setStock(book.getStock() - quantity);
             catalogRepository.save(book);
 
             OrderItem orderItem = new OrderItem();
             orderItem.setBook(book);
-            orderItem.setQuantity(item.getQuantity());
+            orderItem.setQuantity(quantity);
             orderItem.setPriceAtPurchase(book.getPrice());
             orderItem.setOrder(order);
 
             order.getItems().add(orderItem);
-            total = total.add(book.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+
+            BigDecimal itemTotal = book.getPrice().multiply(BigDecimal.valueOf(quantity));
+            total = total.add(itemTotal);
         }
 
         order.setTotalAmount(total);
@@ -91,6 +98,7 @@ public class OrderService {
 
         cart.getItems().clear();
         cartRepository.save(cart);
+
         eventPublisher.publishEvent(new OrderPlacedEvent(this, savedOrder));
 
         return orderMapper.toResponse(savedOrder);
@@ -154,6 +162,9 @@ public class OrderService {
 
     private String getCurrentUsername() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (null == username || username.isEmpty()) {
+            throw new RuntimeException("Unauthenticated access");
+        }
         return userRepository.findByUsername(username)
                 .map(User::getUsername)
                 .orElseThrow(() -> new RuntimeException("User not found"));
