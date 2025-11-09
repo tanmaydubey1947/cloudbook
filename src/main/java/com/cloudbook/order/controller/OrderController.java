@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,7 +24,6 @@ public class OrderController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PostMapping
-    @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<BaseResponse> createOrder() {
         final BaseResponse response = orderService.placeOrder();
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -37,7 +35,6 @@ public class OrderController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error"),
     })
     @GetMapping("{orderId}")
-    @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<BaseResponse> viewOrder(@PathVariable("orderId") String orderId) {
         final BaseResponse response = orderService.getOrderById(orderId);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -49,7 +46,6 @@ public class OrderController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error"),
     })
     @GetMapping
-    @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<BaseResponse> viewUserOrder() {
         final BaseResponse response = orderService.getUserOrders();
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -61,7 +57,6 @@ public class OrderController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error"),
     })
     @PatchMapping("{orderId}/cancel")
-    @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<?> cancelOrder(@PathVariable("orderId") String orderId) {
         orderService.cancelOrder(orderId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

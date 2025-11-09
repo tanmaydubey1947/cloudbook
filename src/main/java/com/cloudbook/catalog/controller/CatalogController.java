@@ -8,10 +8,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -31,7 +29,6 @@ public class CatalogController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error"),
     })
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('CUSTOMER')")
     public ResponseEntity<List<CatalogResponse>> listBooks(@RequestParam(required = false) String genre,
                                                            @RequestParam(required = false) String author,
                                                            @RequestParam(required = false) BigDecimal minPrice,
@@ -49,7 +46,6 @@ public class CatalogController {
             @ApiResponse(responseCode = "404", description = "Book not found")
     })
     @GetMapping("/{bookId}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('CUSTOMER')")
     public ResponseEntity<CatalogResponse> getBookById(@PathVariable String bookId) {
         log.info("Fetching book details for ID: {}", bookId);
         CatalogResponse response = catalogService.getBookById(bookId);
@@ -62,7 +58,6 @@ public class CatalogController {
             @ApiResponse(responseCode = "400", description = "Invalid request")
     })
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CatalogResponse> addBook(@RequestBody CatalogRequest request) {
         log.info("Adding a new book...");
         CatalogResponse response = catalogService.addBook(request);
@@ -75,7 +70,6 @@ public class CatalogController {
             @ApiResponse(responseCode = "404", description = "Book not found")
     })
     @PutMapping("/{bookId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CatalogResponse> updateBook(@PathVariable String bookId,
                                                       @RequestBody CatalogRequest request) {
         log.info("Updating book details for ID: {}", bookId);
@@ -89,7 +83,6 @@ public class CatalogController {
             @ApiResponse(responseCode = "404", description = "Book not found")
     })
     @DeleteMapping("/{bookId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CatalogResponse> deleteBook(@PathVariable String bookId) {
         log.info("Deleting book with ID: {}", bookId);
         CatalogResponse response = catalogService.deleteBook(bookId);
@@ -102,7 +95,6 @@ public class CatalogController {
             @ApiResponse(responseCode = "404", description = "Book not found")
     })
     @PatchMapping("/{bookId}/stock")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CatalogResponse> updateStock(@PathVariable String bookId, @RequestBody CatalogRequest request) {
         log.info("Updating stock for book ID: {}", bookId);
         CatalogResponse response = catalogService.updateStock(bookId, request.getDelta());

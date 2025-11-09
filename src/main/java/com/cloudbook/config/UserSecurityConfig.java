@@ -5,6 +5,7 @@ import com.cloudbook.auth.service.auth.filter.JwtAuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -41,11 +42,12 @@ public class UserSecurityConfig {
                                 .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**").permitAll()
                                 .requestMatchers("/error").permitAll()
-//                                .requestMatchers("/api/auth/**").authenticated()
-//                                .requestMatchers("/api/books/**").authenticated()
-//                                .requestMatchers("/api/cart/**").authenticated()
-//                                .requestMatchers("/api/order/**").authenticated()
-//                                .requestMatchers("/api/admin/analytics/**").authenticated()
+                                .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
+                                .requestMatchers("/api/cart/**").hasAuthority("CUSTOMER")
+                                .requestMatchers("/api/orders/**").hasAuthority("CUSTOMER")
+                                .requestMatchers(HttpMethod.GET, "/api/books/**").hasAnyAuthority("ADMIN", "CUSTOMER")
+                                .requestMatchers("/api/books/**").hasAuthority("ADMIN")
+
                                 .requestMatchers("/api/**").authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
