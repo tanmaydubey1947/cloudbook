@@ -25,7 +25,7 @@ public class CartController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error"),
     })
     @GetMapping
-    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<BaseResponse> viewCart() {
         final BaseResponse response = cartService.getCurrentUserCart();
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -38,7 +38,7 @@ public class CartController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PostMapping("/add")
-    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<BaseResponse> addToCart(@RequestBody CartRequest request) {
         final BaseResponse response = cartService.addToCart(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -50,7 +50,7 @@ public class CartController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error"),
     })
     @DeleteMapping("/remove/{bookId}")
-    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<BaseResponse> removeFromCart(@PathVariable("bookId") String bookId) { //TODO: Check if we can get UUID
         final BaseResponse response = cartService.removeItem(bookId);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -63,7 +63,7 @@ public class CartController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @DeleteMapping("/clear")
-    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<BaseResponse> clearCart() {
         final BaseResponse response = cartService.clearCart();
         return new ResponseEntity<>(response, HttpStatus.OK);

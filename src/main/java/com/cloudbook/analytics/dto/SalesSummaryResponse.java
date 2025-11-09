@@ -1,5 +1,7 @@
 package com.cloudbook.analytics.dto;
 
+import com.cloudbook.common.dto.BaseResponse;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +15,8 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SalesSummaryResponse {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class SalesSummaryResponse extends BaseResponse {
     private BigDecimal totalRevenue;
     private Map<LocalDate, BigDecimal> dailyBreakdown;
 }

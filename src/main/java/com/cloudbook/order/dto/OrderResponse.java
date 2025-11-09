@@ -1,6 +1,7 @@
 package com.cloudbook.order.dto;
 
 import com.cloudbook.common.dto.BaseResponse;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrderResponse extends BaseResponse {
 
     private UUID id;

@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/books")
@@ -31,14 +32,14 @@ public class CatalogController {
     })
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('CUSTOMER')")
-    public ResponseEntity<Page<CatalogResponse>> listBooks(@RequestParam(required = false) String genre,
-                                                  @RequestParam(required = false) String author,
-                                                  @RequestParam(required = false) BigDecimal minPrice,
-                                                  @RequestParam(required = false) BigDecimal maxPrice,
-                                                  @RequestParam(defaultValue = "0") int page,
-                                                  @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<List<CatalogResponse>> listBooks(@RequestParam(required = false) String genre,
+                                                           @RequestParam(required = false) String author,
+                                                           @RequestParam(required = false) BigDecimal minPrice,
+                                                           @RequestParam(required = false) BigDecimal maxPrice,
+                                                           @RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam(defaultValue = "10") int size) {
         log.info("Fetching book details with filters...");
-        Page<CatalogResponse> response = catalogService.listBooks(genre, author, minPrice, maxPrice, page, size);
+        List<CatalogResponse> response = catalogService.listBooks(genre, author, minPrice, maxPrice, page, size);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

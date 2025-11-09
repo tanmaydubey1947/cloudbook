@@ -1,5 +1,7 @@
 package com.cloudbook.analytics.dto;
 
+import com.cloudbook.common.dto.BaseResponse;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +13,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TopBookResponse {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class TopBookResponse extends BaseResponse {
     private UUID bookId;
     private Long totalSold;
 }

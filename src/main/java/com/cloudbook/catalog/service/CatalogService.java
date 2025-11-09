@@ -26,7 +26,7 @@ public class CatalogService {
     private CatalogRepository catalogRepository;
 
 
-    public Page<CatalogResponse> listBooks(String genre,
+    public List<CatalogResponse> listBooks(String genre,
                                            String author,
                                            BigDecimal minPrice,
                                            BigDecimal maxPrice,
@@ -69,7 +69,7 @@ public class CatalogService {
                 ))
                 .toList();
 
-        return new PageImpl<>(bookResponses, pageable, filtered.size());
+        return new PageImpl<>(bookResponses, pageable, filtered.size()).get().toList();
     }
 
     public CatalogResponse getBookById(String bookId) {
