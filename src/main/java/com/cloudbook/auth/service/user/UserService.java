@@ -33,7 +33,7 @@ public class UserService {
         userRepository.save(user);
 
         UserResponse response = new UserResponse();
-        response.setMessage("User registered successfully");
+        response.setMessage("Registration Successful");
         return response;
     }
 }

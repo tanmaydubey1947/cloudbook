@@ -65,7 +65,8 @@ public class CatalogService {
                         book.getId().toString(),
                         book.getTitle(),
                         book.getAuthor(),
-                        book.getPrice()
+                        book.getPrice(),
+                        book.getGenre()
                 ))
                 .toList();
 
@@ -80,7 +81,8 @@ public class CatalogService {
                 book.getId().toString(),
                 book.getTitle(),
                 book.getAuthor(),
-                book.getPrice()
+                book.getPrice(),
+                book.getGenre()
         );
     }
 
@@ -100,7 +102,8 @@ public class CatalogService {
                 savedBook.getId().toString(),
                 savedBook.getTitle(),
                 savedBook.getAuthor(),
-                savedBook.getPrice()
+                savedBook.getPrice(),
+                savedBook.getGenre()
         );
     }
 
@@ -121,7 +124,8 @@ public class CatalogService {
                 updatedBook.getId().toString(),
                 updatedBook.getTitle(),
                 updatedBook.getAuthor(),
-                updatedBook.getPrice()
+                updatedBook.getPrice(),
+                updatedBook.getGenre()
         );
     }
 
@@ -157,7 +161,8 @@ public class CatalogService {
                 updatedBook.getId().toString(),
                 updatedBook.getTitle(),
                 updatedBook.getAuthor(),
-                updatedBook.getPrice()
+                updatedBook.getPrice(),
+                updatedBook.getGenre()
         );
     }
 

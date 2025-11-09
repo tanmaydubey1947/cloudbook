@@ -18,4 +18,5 @@ public class CatalogResponse extends BaseResponse {
     private String title;
     private String author;
     private BigDecimal price;
+    private String genre;
 }
