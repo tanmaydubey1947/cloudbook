@@ -40,7 +40,7 @@ public class UserSecurityConfig {
                 .authorizeHttpRequests(
                         request -> request
                                 .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
-                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**").permitAll()
+                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**", "/actuator/**").permitAll()
                                 .requestMatchers("/error").permitAll()
                                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                                 .requestMatchers("/api/cart/**").hasAuthority("CUSTOMER")
