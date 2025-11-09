@@ -163,3 +163,11 @@ The application implements Resilience4j patterns:
 - **Retry**: Stock update operations retry up to 3 times with 500ms delay
 - **Rate Limiter**: Stock updates limited to 5 requests per 10 seconds
 - **Circuit Breaker**: Protects against cascading failures
+
+
+## Jacoco Report
+```bash
+./mvnw clean test jacoco:report
+```
+
+![img.png](img.png)
